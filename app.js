@@ -4,8 +4,26 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
+//import mongoose
+const mongoose = require("mongoose");
+mongoose
+    .connect("mongodb://localhost:27017/db_staycation", {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+        useFindAndModify: false,
+    })
+    .then(() => {
+        console.log("MongoDB connected...");
+    })
+    .catch((err) => console.log(err));
+//TODO:FIXING DEPRECETED with THEN and CATCH
+
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+
+// router admin
+const adminRouter = require("./routes/admin");
 
 var app = express();
 
@@ -27,6 +45,9 @@ app.use(
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+
+// admin
+app.use("/admin", adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
